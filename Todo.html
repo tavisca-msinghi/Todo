@@ -4,6 +4,10 @@
 	<title> Todo </title>
 </head>
 <style >
+	body{
+		margin:0;
+		background-color: white;
+	}
 	#leftdiv{
 		width: 20%;
 		float: left;
@@ -12,22 +16,21 @@
 		position: absolute;
 		flex: 0;
 	}
+
 	.rightdivclass
 	{
 		display:none;
 		width:78%;
 		float:right;
-		background-color: white;
+		background-color: blue;
 	}
-	body{
-		height:100%;
-		margin:0;
-		background-color: white;
-	}
+
+	
 	ul{
 		list-style-type: none;
 		padding :0;
 		margin :0;
+		color: #df9f9f;
 		
 	}
 	li {
@@ -38,20 +41,68 @@
   		text-decoration: none;
   		height: 30px;
 	}
-	li a{
-		display: block;
-		height: inherit;
-	}
+
 
 	a:hover, a:active {
   		background-color: grey;
 	}
-	.rightdivclass{
-	  display: none;
-	  padding: 6px 12px;
-	  border: 1px solid #ccc;
-	  border-top: none;
+
+
+
+	#task {
+	  background-position: 10px 12px;
+	  background-repeat: no-repeat;
+	  width: 50%;
+	  font-size: 16px;
+	  padding: 12px 10px 12px 10px;
+	  border: 1px solid #ddd;
+	  margin-bottom: 12px;
 	}
+	#myUL{
+		
+	background-color: white;
+
+
+	}
+
+	#myul li{
+		height: 20px;
+cursor: pointer;
+  position: relative;
+  padding: 12px 8px 12px 12px;
+  background-color: white;
+  list-style-type: none;
+  font-size: 18px;
+  transition: 0.2s;
+	}
+	#myul li a{
+		text-decoration: none;
+	}
+
+	#myul li:hover {
+  background: #ddd;
+}
+
+.close {
+  position: relative;
+  right: 0;
+  top: 0;
+  padding: 12px 16px 12px 16px;
+}
+
+.close:hover {
+  background-color: #blue;
+  color: white;
+}
+
+.btn{
+	position: relative;
+	top : 0;
+	padding: 12px 16px 12px 16px;
+	width: 60px;
+	right: 150px;
+}
+
 
 </style>
 
@@ -65,18 +116,15 @@
 </div>
 <div class="rightdivclass" id="rightdivtodo">
 	<h1>Todo</h1>
-	Search:<input type="text" placeholder="Enter the element" id="task">
+	Search:<input type="text" placeholder="Enter the element" id="task"  onkeyup="suggestion()">
 	
-	<button type="button" id="add" onclick="appendtodo()">Add</button>
-	
+	<button type="button" id="add" onclick="appendtodo()" >Add</button>
+	<p> </p>
 	<ul id="myUL">
-	  <li>Hit the gym</li>
-	  <li class="checked">Pay bills</li>
-	  <li>Meet George</li>
-	  <li>Buy eggs</li>
-	  <li>Read a book</li>
-	  <li>Organize office</li>
-	</ul>
+<!-- 	  <li><a href="#" >Gym</a></li> 
+	  <li><a href="#">website</a></li>
+	  <li><a href="#">Running</a></li> -->
+	</ul> 
 
 </div>
 	<div class="rightdivclass" id="rightdivothers">
@@ -87,6 +135,28 @@
 	</div>
 </body>
 <script type="text/javascript">
+	
+	var ul = document.getElementById("myUL");
+	var myNodelist = ul.getElementsByTagName("li"); 
+	console.log(myNodelist.length);
+	for (var i = 0; i < myNodelist.length; i++) {
+  	var span = document.createElement("SPAN");
+  	var txt = document.createTextNode("\u00D7");
+  	span.className = "close";
+  	span.appendChild(txt);
+  	myNodelist[i].appendChild(span);
+	}
+
+// Click on a close button to hide the current list item
+	var close = document.getElementsByClassName("close");
+	var i;
+	for (i = 0; i < close.length; i++) {
+	  close[i].onclick = function() {
+	    var div = this.parentElement;
+	    div.style.display = "none";
+	  }
+	}
+
 	function selectnav(idname)
 	{
 		
@@ -102,13 +172,77 @@
 	}
 
 	function appendtodo() {
-		// body...
+
+
 		var x = document.getElementById('add');
 		let taskName = document.getElementById('task').value;
 
-		let list = document.getElementById('myUL');
-		list.innerHTML += "<li>" + taskName + "</li>";
+
+		var li = document.createElement("li");
+  	if (taskName === '') {
+    	alert("You must write something!");
+  	} else {
+console.log(taskName);
+var span1 = document.createElement("span");
+span1.contentEditable=false;
+span1.appendChild(document.createTextNode(taskName));
+li.appendChild(span1);
+  var span = document.createElement("SPAN");
+  var txt = document.createTextNode("\u00D7");
+  span.className = "close";
+  span.appendChild(txt);
+  li.appendChild(span);
+
+  var btn = document.createElement("SPAN");
+  btn.className="btn";
+  btn.appendChild(document.createTextNode("edit"));
+  li.appendChild(btn);
+
+    	document.getElementById("myUL").appendChild(li);
+  		}
+  	document.getElementById("task").value = "";
+
+
+
+  console.log(li);
+  for (i = 0; i < close.length; i++) {
+    close[i].onclick = function() {
+      var div = this.parentElement;
+      div.style.display = "none";
+    }
+  }
+
+  var edit = document.getElementsByClassName("btn");
+
+  for (i = 0; i < edit.length; i++) {
+  	//console.log(edit , i);
+    edit[i].onclick = function(){
+    	var div =this.parentElement;
+    	div.getElementsByTagName("SPAN")[0].contentEditable=true;
+
+    }
+  }
+
 
 	}
+	function suggestion() {
+		// body...
+			var input = document.getElementById("task");
+			var filter = input.value.toUpperCase();
+
+			var ul = document.getElementById("myUL");
+			var li = ul.getElementsByTagName("li");
+			for (var i = 0; i < li.length; i++) {
+				var a = li[i].getElementsByTagName("a")[0];
+				var txt=a.textContent||a.innerText;
+				if(txt.toUpperCase().indexOf(filter)>-1){
+					li[i].style.display = "";
+				}
+				else{
+					li[i].style.display = "none";
+				}
+			}
+	}
+
 </script>
 </html>
